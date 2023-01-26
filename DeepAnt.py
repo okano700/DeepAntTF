@@ -38,7 +38,8 @@ class DeepAnt(Model):
         self.pool_stride_2 = pool_stride_2
         self.dropout_rate = dropout_rate
 
-        self.conv_block1 = Sequential([Conv1D(filters = self.n_filter_1, kernel_size = self.kernel_size, strides = self.conv_stride, padding = 'valid', activation = 'relu', input_shape=(self.w_l, self.n_features)),
+        self.conv_block1 = Sequential([Conv1D(filters = self.n_filter_1, kernel_size = self.kernel_size, strides = self.conv_stride, padding = 'valid', activation = 'relu', 
+                                              input_shape=(self.w_l, self.n_features)),
                                                 MaxPooling1D(pool_size = self.pool_size_1)], name = 'Conv_block_1')
         self.conv_block2 = Sequential([Conv1D(filters = self.n_filter_2, kernel_size = self.kernel_size, strides = self.conv_stride, padding = 'valid', activation = 'relu'),
                                                 MaxPooling1D(pool_size = self.pool_size_2)], name = 'Conv_block_2')
