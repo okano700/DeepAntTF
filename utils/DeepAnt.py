@@ -59,7 +59,7 @@ class DeepAnt(Model):
         return self.rsp(x)    
 
     def get_loss(self, inputs):
-        yhat = self.predict(inputs)
+        yhat = self.predict(inputs, verbose = 0)
         y = np.array([y for _, y in inputs])
         return yhat, np.linalg.norm(y.reshape(-1,1)-yhat.reshape(-1,1), axis = -1)
 
