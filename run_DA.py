@@ -85,7 +85,7 @@ if __name__ == "__main__":
     res['n'] = args.n 
     res['id'] =args.i
 
-    path_to_res = 'res_DA_UCR.csv'
+    path_to_res = 'res_DATF_UCR.csv'
     
     if os.path.exists(path_to_res):
         df = pd.read_csv(path_to_res)
