@@ -1,8 +1,10 @@
+import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Conv1D, Flatten, Activation, MaxPooling1D, Dropout, Reshape
 from tensorflow.keras.optimizers import SGD
 from tensorflow.keras import Model
 import numpy as np
+from math import floor
 
 class DeepAnt(Model):
 
@@ -63,4 +65,43 @@ class DeepAnt(Model):
         y = np.array([y for _, y in inputs])
         return yhat, np.linalg.norm(y.reshape(-1,1)-yhat.reshape(-1,1), axis = -1)
 
+if __name__ == "__main__":
 
+    def create_sequences(values, time_steps:int):
+        output = []
+        for i in range(len(values) - time_steps + 1):
+            output.append(values[i : (i + time_steps)])
+        return np.stack(output)
+
+    def get_period(data:np.array, n:int)-> list:
+        f, px = periodogram(data, detrend='linear',nfft=int(len(data)*0.1) )
+        p = []
+        aux = 2
+        for i in range(len(px)):
+            #print(len(p))
+            if len(p)>=n:
+                break
+            elif len(p) == 0:
+                p.append(floor(1/f[np.argmax(px)] + 0.5))
+            else:
+                flag = False
+                v = floor(1/f[px.argsort()[-aux]] + 0.5)
+                for i in range(len(p)):
+                    
+                    if (p[i]%v != 0) and (v%p[i] != 0):
+                        pass
+                    else:
+                        flag = True
+                        break
+                if flag ==False:
+                    p.append(v)
+                aux+=1
+        return p
+
+
+    SEED = 42
+
+    tf.keras.utils.set_random_seed(SEED)
+
+
+    print(DeepAnt())

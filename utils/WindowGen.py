@@ -11,15 +11,25 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import tensorflow as tf
 from sklearn.preprocessing import MinMaxScaler
+from math import ceil
 
 class WindowGenerator():
-    def __init__(self, input_width, label_width, shift,
-               train_df= None, val_df= None, test_df=None,
-               label_columns=None):
+    def __init__(self, input_width, label_width, shift, train_df, test_df, val_size = 0.01, label_columns=None):
+        """
+        input_width = Window size
+        label_width = Forecast Horizon
+        shit = shift
+        train_df = training dataframe
+        test_df = test dataframe
+        val_size = % of trainning df to validation
+        label_columns = label column
+        """
         # Store the raw data.
-        self.train_df = train_df
-        self.val_df = val_df
+        s_val = input_width + label_width + max(10, ceil(len(train_df)* val_size))
+        print(s_val)
+        self.train_df = train_df.iloc[:-s_val]
         self.test_df = test_df
+        self.val_df = train_df.iloc[-s_val:]
         self.scaler = MinMaxScaler()
         self.scaler.fit(train_df.values.reshape(-1,1))
 
@@ -67,6 +77,7 @@ class WindowGenerator():
         labels.set_shape([None, self.label_width, None])
 
         return inputs, labels
+
 
 
     def plot(self, model=None, plot_col='T (degC)', max_subplots=3):
@@ -128,7 +139,7 @@ class WindowGenerator():
           targets=None,
           sequence_length=self.total_window_size,
           sequence_stride=1,
-          shuffle=False,
+          shuffle=True,
           batch_size=1,)
 
         ds = ds.map(self.split_window)

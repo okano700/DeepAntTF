@@ -75,7 +75,8 @@ docs/_build/
 target/
 
 # Jupyter Notebook
-.ipynb_checkpoints
+*.ipynb
+.ipynb_checkpoints/
 
 # IPython
 profile_default/
@@ -100,6 +101,12 @@ celerybeat.pid
 
 # SageMath parsed files
 *.sage.py
+
+#temporary files
+tmp/
+
+#notebooks
+*/ipynb
 
 # Environments
 .env
